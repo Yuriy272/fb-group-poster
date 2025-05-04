@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 from functools import wraps
 import threading
 import os
 
-# --- Налаштування додатку ---
 app = Flask(__name__)
 app.secret_key = "супер_секретний_ключ"
 
@@ -22,7 +21,7 @@ VALID_CODES = {
     "test": "Тестовий",
 }
 
-# --- Функції авторизації ---
+# --- Авторизація ---
 def authenticate_user(code):
     if code in VALID_CODES:
         session["logged_in"] = True
@@ -41,7 +40,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# --- Імпортуємо свою логіку ---
+# --- Імпортуємо логіку ---
 from fb_bot_logic import post_to_facebook_groups  # Переконайся, що цей файл існує
 
 # --- Роутинг ---
@@ -98,7 +97,16 @@ def stop():
     status_log.append("🛑 Зупинка ініційована користувачем.")
     return redirect("/")
 
+@app.route("/status")
+@login_required
+def status():
+    return jsonify({
+        "log": status_log,
+        "count": post_counter["count"]
+    })
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
+
 
 
