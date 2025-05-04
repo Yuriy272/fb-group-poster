@@ -17,7 +17,11 @@ def post_to_facebook_groups(post_text, group_links, image_path, status_log, stop
     chrome_options = Options()
     chrome_options.add_argument(r"user-data-dir=C:\SeleniumProfile")
     chrome_options.add_argument("profile-directory=Profile 1")
+    # ВИМКНЕНО HEADLESS щоб бачити браузер
+    # chrome_options.add_argument("--headless")
+
     driver = webdriver.Chrome(options=chrome_options)
+    wait = WebDriverWait(driver, 20)
 
     for link in group_links:
         if stop_flag["stop"]:
@@ -27,47 +31,43 @@ def post_to_facebook_groups(post_text, group_links, image_path, status_log, stop
         try:
             status_log.append(f"\n➡️ Переходимо в групу: {link}")
             driver.get(link)
-            time.sleep(10)
 
-            create_post = WebDriverWait(driver, 15).until(
+            wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+            status_log.append("🌐 Сторінка завантажена")
+
+            # Очікуємо і натискаємо на поле створення поста
+            create_post = wait.until(
                 EC.element_to_be_clickable((By.XPATH, "//span[contains(text(),'Напишіть щось') or contains(text(),\"What's on your mind\")]"))
             )
             create_post.click()
             status_log.append("📝 Відкрито редактор публікації")
-            time.sleep(3)
 
-            post_area = WebDriverWait(driver, 15).until(
-                EC.presence_of_element_located((By.XPATH, "//div[@role='textbox']"))
-            )
-            driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", post_area)
+            # Вставка тексту
+            post_area = wait.until(EC.presence_of_element_located((By.XPATH, "//div[@role='textbox']")))
             ActionChains(driver).move_to_element(post_area).click().send_keys(post_text).perform()
             status_log.append("💬 Вставлено текст")
-            time.sleep(2)
 
+            # Кнопка для додавання фото
             photo_buttons = driver.find_elements(By.XPATH, "//div[@role='button']")
             photo_clicked = False
             for button in photo_buttons:
                 label = button.get_attribute("aria-label")
                 if label and ('світлина' in label.lower() or 'photo' in label.lower()):
                     driver.execute_script("arguments[0].click();", button)
+                    status_log.append("🖼️ Натиснуто 'Світлина/відео'")
                     photo_clicked = True
-                    status_log.append("🖼️ Натиснуто іконку 'Світлина/відео'")
                     break
 
             if not photo_clicked:
                 raise Exception("❌ Не знайдено кнопку 'Світлина/відео'")
 
-            time.sleep(2)
+            # Завантаження файлу
+            file_input = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@type='file' and @multiple]")))
+            file_input.send_keys(os.path.abspath(image_path))
+            status_log.append("📷 Фото додано")
 
-            file_input = WebDriverWait(driver, 15).until(
-                EC.presence_of_element_located((By.XPATH, "//input[@type='file' and @multiple]"))
-            )
-            absolute_image_path = os.path.abspath(image_path)
-            file_input.send_keys(absolute_image_path)
-            status_log.append("📷 Фото додано до поста")
-            time.sleep(5)
-
-            publish_button = WebDriverWait(driver, 15).until(
+            # Публікація
+            publish_button = wait.until(
                 EC.element_to_be_clickable((By.XPATH, "//div[@aria-label='Опублікувати' or @aria-label='Post']"))
             )
             publish_button.click()
@@ -88,5 +88,6 @@ def post_to_facebook_groups(post_text, group_links, image_path, status_log, stop
 
     driver.quit()
     status_log.append("✅ Завершено публікацію.")
+
 
 
