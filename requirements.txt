@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-=======
 Flask==3.1.0
 pip freeze > requirements.txt
 
->>>>>>> 4a5d2ee31b1d03b706487e4e5a3c6f3c42ab0507
+
