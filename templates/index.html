@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook Poster</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #1a1a1a;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.7);
+        }
+
+        h1 {
+            text-align: center;
+            color: #33b5e5;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .user-info a {
+            color: #bbb;
+            text-decoration: underline;
+            margin-left: 10px;
+        }
+
+        textarea, input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 5px;
+            resize: vertical;
+            margin-top: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-post {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-post:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-stop {
+            background-color: #e53935;
+            color: white;
+        }
+
+        .btn-stop:hover {
+            background-color: #c62828;
+        }
+
+        .status-box {
+            margin-top: 30px;
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .post-count {
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-bullhorn"></i> Facebook Poster</h1>
+        <div class="user-info">
+            👋 Вітаю, <strong>{{ user }}</strong>!
+            <a href="/logout">Вийти</a>
+        </div>
+        <form method="post" action="/post" enctype="multipart/form-data">
+            <label for="post_text">Текст поста:</label>
+            <textarea name="post_text" rows="4" required></textarea>
+
+            <label for="group_links">Групи (по одному на рядок):</label>
+            <textarea name="group_links" rows="4" required></textarea>
+
+            <label for="photo">Фото:</label>
+            <input type="file" name="photo" accept="image/*" required>
+
+            <div class="btn-container">
+                <button type="submit" class="btn-post"><i class="fas fa-paper-plane"></i> Опублікувати</button>
+                <a href="/stop"><button type="button" class="btn-stop"><i class="fas fa-stop-circle"></i> Зупинити</button></a>
+            </div>
+        </form>
+
+        <div class="status-box">
+            <div class="post-count">Опубліковано: {{ counter }} постів</div>
+            {% for line in status %}
+                {{ line }}<br>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+
+

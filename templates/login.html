@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Вхід</title>
+</head>
+<body>
+    <h2>🔐 Вхід за кодом</h2>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        <label>Код доступу:</label>
+        <input type="text" name="code" required>
+        <button type="submit">Увійти</button>
+    </form>
+</body>
+</html>

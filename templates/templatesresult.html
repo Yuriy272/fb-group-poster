@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Результати</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2>📋 Результати публікації</h2>
+        <ul class="list-group mt-4">
+            {% for result in results %}
+                <li class="list-group-item">{{ result }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/" class="btn btn-secondary mt-4">🔙 Назад</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "admin": {
+    "code": "1234",
+    "role": "admin"
+  },
+  "user1": {
+    "code": "abcd",
+    "role": "user"
+  }
+}
