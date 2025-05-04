@@ -7,42 +7,50 @@
 </head>
 <body class="bg-light">
 <div class="container py-5">
-    <h1 class="mb-4 text-center">🤖 Facebook Group Poster</h1>
 
-    <p>👤 Авторизований як: <strong>{{ user }}</strong></p>
+    {% if user %}
+        <h1 class="mb-4 text-center">🤖 Facebook Group Poster</h1>
 
-    <form action="/post" method="POST" enctype="multipart/form-data" class="mb-4">
-        <div class="mb-3">
-            <label for="post_text" class="form-label">Текст поста:</label>
-            <textarea class="form-control" name="post_text" id="post_text" rows="3"></textarea>
-        </div>
+        <p>👤 Авторизований як: <strong>{{ user }}</strong></p>
 
-        <div class="mb-3">
-            <label for="group_links" class="form-label">Посилання на групи (по одному в рядку):</label>
-            <textarea class="form-control" name="group_links" id="group_links" rows="4"></textarea>
-        </div>
+        <form action="/post" method="POST" enctype="multipart/form-data" class="mb-4">
+            <div class="mb-3">
+                <label for="post_text" class="form-label">Текст поста:</label>
+                <textarea class="form-control" name="post_text" id="post_text" rows="3"></textarea>
+            </div>
 
-        <div class="mb-3">
-            <label for="photo" class="form-label">Фото:</label>
-            <input type="file" class="form-control" name="photo" id="photo" required>
-        </div>
+            <div class="mb-3">
+                <label for="group_links" class="form-label">Посилання на групи (по одному в рядку):</label>
+                <textarea class="form-control" name="group_links" id="group_links" rows="4"></textarea>
+            </div>
 
-        <button type="submit" class="btn btn-primary">📤 Запостити</button>
-        <a href="/stop" class="btn btn-warning ms-2">🛑 Зупинити</a>
-        <a href="/logout" class="btn btn-danger ms-2">🚪 Вийти</a>
-    </form>
+            <div class="mb-3">
+                <label for="photo" class="form-label">Фото:</label>
+                <input type="file" class="form-control" name="photo" id="photo" required>
+            </div>
 
-    <h3>📈 Статус:</h3>
-    <ul class="list-group mb-3">
-        {% for msg in status %}
-            <li class="list-group-item">{{ msg }}</li>
-        {% endfor %}
-    </ul>
+            <button type="submit" class="btn btn-primary">📤 Запостити</button>
+            <a href="/stop" class="btn btn-warning ms-2">🛑 Зупинити</a>
+            <a href="/logout" class="btn btn-danger ms-2">🚪 Вийти</a>
+        </form>
 
-    <p>✅ Всього запощено: <strong>{{ counter }}</strong></p>
+        <h3>📈 Статус:</h3>
+        <ul class="list-group mb-3">
+            {% for msg in status %}
+                <li class="list-group-item">{{ msg }}</li>
+            {% endfor %}
+        </ul>
+
+        <p>✅ Всього запощено: <strong>{{ counter }}</strong></p>
+
+    {% else %}
+        <p class="text-danger">⛔ Ви не авторизовані. <a href="/login">Увійти</a></p>
+    {% endif %}
+
 </div>
 </body>
 </html>
+
 
 
 
